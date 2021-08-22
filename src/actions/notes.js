@@ -1,3 +1,4 @@
+import Swal from "sweetalert2";
 import { db } from "../firebase/firebaseConfig";
 import { loadNotes } from "../helpers/loadNotes";
 import { types } from "../types/types";
@@ -37,4 +38,22 @@ export const startLoadingNotes = (uid) => {
 export const setNotes = (notes) => ({
   type: types.notesLoad,
   payload: notes,
+});
+
+export const startSaveNote = (note) => {
+  //Because this is a sync task we use thunk to have access to the dispatch and getState
+  return async (dispatch, getState) => {
+    const { uid } = getState().auth;
+
+    const noteToFireStore = { ...note };
+    delete noteToFireStore.id;
+    await db.doc(`${uid}/journal/notes/${note.id}`).update(noteToFireStore);
+    dispatch(refreshNote(note.id, noteToFireStore));
+    Swal.fire("Saved", note.title, "success");
+  };
+};
+
+export const refreshNote = (id, note) => ({
+  type: types.notesUpdate,
+  payload: { id, note: { id, ...note } },
 });

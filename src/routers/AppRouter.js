@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Switch, Redirect } from "react-router-dom";
 import { login } from "../actions/auth";
+import { startLoadingNotes } from "../actions/notes";
 import { JournalScreen } from "../components/journal/JournalScreen";
 import { firebase } from "../firebase/firebaseConfig";
 import { AuthRouter } from "./AuthRouter";
@@ -18,10 +19,13 @@ export const AppRouter = () => {
 
   useEffect(() => {
     //This function returns an Observable and checks if the user is logged in
-    firebase.auth().onAuthStateChanged((user) => {
+    firebase.auth().onAuthStateChanged(async (user) => {
+      //Check if user is authenticated to load his data
       if (user?.uid) {
         dispatch(login(user.uid, user.displayName));
         setIsLoggedIn(true);
+
+        dispatch(startLoadingNotes(user.uid));
       } else setIsLoggedIn(false);
 
       setChecking(false);

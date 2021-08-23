@@ -44,12 +44,11 @@ export const NoteScreen = () => {
           className="notes__textarea"
           onChange={handleInputChange}
         ></textarea>
-        <div className="notes__image">
-          <img
-            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR4d0Yi8SwQOlbmnL0BJzjGbI5N8LU1Omdz2Q&usqp=CAU"
-            alt="The Moon"
-          />
-        </div>
+        {note.url && (
+          <div className="notes__image">
+            <img src={note.url} alt="Image" />
+          </div>
+        )}
       </div>
     </div>
   );

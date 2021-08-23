@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import { db } from "../firebase/firebaseConfig";
+import { fileUpload } from "../helpers/fileUpload";
 import { loadNotes } from "../helpers/loadNotes";
 import { types } from "../types/types";
 
@@ -57,3 +58,23 @@ export const refreshNote = (id, note) => ({
   type: types.notesUpdate,
   payload: { id, note: { id, ...note } },
 });
+
+//If the task is async, the function name will begin with 'start'
+export const startUploading = (file) => {
+  return async (dispatch, getState) => {
+    const { active: activeNote } = getState().notes;
+    Swal.fire({
+      title: "Uploading",
+      text: "Please wait...",
+      allowOutsideClick: false,
+      onBeforeOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    const fileUrl = await fileUpload(file);
+    activeNote.url = fileUrl;
+    dispatch(startSaveNote(activeNote));
+    Swal.close();
+  };
+};

@@ -2,6 +2,7 @@ import { firebase, googleAuthProvider } from "../firebase/firebaseConfig";
 import Swal from "sweetalert2";
 import { types } from "../types/types";
 import { finishLoading, startLoading } from "./ui";
+import { noteLogout } from "./notes";
 
 export const startLoginEmailPassword = (email, password) => {
   //this dispatch is offered by thunk
@@ -13,7 +14,6 @@ export const startLoginEmailPassword = (email, password) => {
       .then(({ user }) => {
         dispatch(finishLoading());
         dispatch(login(user.uid, user.displayName));
-        console.log(user);
       })
       .catch((err) => {
         dispatch(finishLoading());
@@ -66,6 +66,7 @@ export const startLogout = () => {
   return async (dispatch) => {
     await firebase.auth().signOut();
     dispatch(logout());
+    dispatch(noteLogout());
   };
 };
 

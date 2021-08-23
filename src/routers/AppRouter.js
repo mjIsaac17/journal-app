@@ -14,7 +14,7 @@ export const AppRouter = () => {
   const dispatch = useDispatch();
 
   //Video 250. Wait to Firebase to know if the user is authenticated or not
-  const [checking, setChecking] = useState(true);
+  // const [checking, setChecking] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
@@ -28,11 +28,11 @@ export const AppRouter = () => {
         dispatch(startLoadingNotes(user.uid));
       } else setIsLoggedIn(false);
 
-      setChecking(false);
+      // setChecking(false);
     });
     //Without any dependency [] will trigger the effect only once
     //We are adding the dispatch to remove a warning in the browser
-  }, [dispatch, setChecking, setIsLoggedIn]);
+  }, [dispatch, setIsLoggedIn]);
 
   return (
     <Router>

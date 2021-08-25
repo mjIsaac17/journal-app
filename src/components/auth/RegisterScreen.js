@@ -14,7 +14,7 @@ export const RegisterScreen = () => {
 
   const initialFormValues = {
     name: "Isaac",
-    email: "isaac2@gmail.com",
+    email: "",
     password: "123456",
     password2: "123456",
   };

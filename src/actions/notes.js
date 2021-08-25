@@ -14,11 +14,15 @@ export const startNewNote = () => {
       body: "",
       date: new Date().getTime(),
     };
-    //Order to store data in Firestore: collection/document/collection/document ...
-    const doc = await db.collection(`${uid}/journal/notes`).add(newNote);
-    // console.log(doc);
-    dispatch(activeNote(doc.id, newNote));
-    dispatch(addNewNoteInStore(doc.id, newNote));
+    try {
+      //Order to store data in Firestore: collection/document/collection/document ...
+      const doc = await db.collection(`${uid}/journal/notes`).add(newNote);
+      // console.log(doc);
+      dispatch(activeNote(doc.id, newNote));
+      dispatch(addNewNoteInStore(doc.id, newNote));
+    } catch (error) {
+      console.log(error);
+    }
   };
 };
 
@@ -73,9 +77,9 @@ export const startUploading = (file) => {
       title: "Uploading",
       text: "Please wait...",
       allowOutsideClick: false,
-      onBeforeOpen: () => {
-        Swal.showLoading();
-      },
+      // onBeforeOpen: () => {
+      //   Swal.showLoading();
+      // },
     });
 
     const fileUrl = await fileUpload(file);
